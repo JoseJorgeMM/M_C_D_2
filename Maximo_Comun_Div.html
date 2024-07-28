@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máximo Común Divisor (MCD)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 20px 0;
+        }
+        #problem, #solution {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        #explanation {
+            font-size: 18px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .step {
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 2s, transform 2s;
+        }
+        .step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>Máximo Común Divisor (MCD)</h1>
+<h1> Profesor: Jose Jorge Muñoz</h1>
+    <button onclick="generateProblem()">Generar Nuevo Problema</button>
+    <div id="problem"></div>
+    <div id="explanation"></div>
+    <div id="solution"></div>
+
+    <script>
+        function generateProblem() {
+            const num1 = Math.floor(Math.random() * 50) + 10;
+            const num2 = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('problem').textContent = `Calcular el MCD de ${num1} y ${num2}`;
+            document.getElementById('solution').textContent = '';
+            document.getElementById('explanation').innerHTML = '';
+            explainMCD(num1, num2);
+        }
+
+        function explainMCD(num1, num2) {
+            const explanation = document.getElementById('explanation');
+            const steps = [];
+
+            steps.push(`Paso 1: Identificar los divisores de ${num1} y ${num2}.`);
+            const divisors1 = getDivisors(num1);
+            const divisors2 = getDivisors(num2);
+            steps.push(`Divisores de ${num1}: ${divisors1.join(', ')}`);
+            steps.push(`Divisores de ${num2}: ${divisors2.join(', ')}`);
+
+            steps.push(`Paso 2: Identificar los divisores comunes.`);
+            const commonDivisors = divisors1.filter(value => divisors2.includes(value));
+            steps.push(`Divisores comunes: ${commonDivisors.join(', ')}`);
+
+            steps.push(`Paso 3: Identificar el mayor divisor común.`);
+            const mcd = Math.max(...commonDivisors);
+            steps.push(`El mayor divisor común es ${mcd}.`);
+
+            steps.push(`Paso 4: Verificar que ${mcd} divide a ambos números sin dejar residuo.`);
+            steps.push(`${num1} ÷ ${mcd} = ${num1/mcd} (sin residuo)`);
+            steps.push(`${num2} ÷ ${mcd} = ${num2/mcd} (sin residuo)`);
+
+            steps.push(`Por lo tanto, el MCD de ${num1} y ${num2} es ${mcd}.`);
+
+            steps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'step';
+                stepElement.textContent = step;
+                explanation.appendChild(stepElement);
+                setTimeout(() => stepElement.classList.add('visible'), index * 2000);
+            });
+
+            setTimeout(() => {
+                document.getElementById('solution').textContent = `MCD(${num1}, ${num2}) = ${mcd}`;
+            }, steps.length * 2000);
+        }
+
+        function getDivisors(num) {
+            const divisors = [];
+            for (let i = 1; i <= num; i++) {
+                if (num % i === 0) {
+                    divisors.push(i);
+                }
+            }
+            return divisors;
+        }
+
+        // Generar el primer problema al cargar la página
+        generateProblem();
+    </script>
+</body>
+</html>
